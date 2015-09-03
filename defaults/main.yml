@@ -2,6 +2,7 @@ nginx_global_config:
   override: yes
   path: /etc/nginx/nginx.conf
   template: nginx.j2
+nginx_remove_default_vhost: yes
 nginx:
   worker_processes: 4
   pid: /var/run/nginx.pid
