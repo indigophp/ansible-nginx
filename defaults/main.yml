@@ -1,0 +1,12 @@
+nginx_global_config:
+  override: yes
+  path: /etc/nginx/nginx.conf
+  template: nginx.j2
+nginx:
+  worker_processes: 1
+  error_log: "/var/log/nginx/error.log"
+  pid: "/var/run/nginx.pid"
+  events:
+    worker_connections: 1024
+nginx_vhosts: []
+nginx_upstreams: []

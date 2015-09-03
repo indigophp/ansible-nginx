@@ -1,0 +1,29 @@
+{% macro directive(key, value, indentationLevel = 0) -%}
+{{ "%s %s;" | format(key, value) | indent(4 * indentationLevel, true) }}
+{%- endmacro -%}
+
+{% macro context(name, content, indentationLevel = 0) -%}
+{% if name is not none -%}
+{{ "%s {" | format(name) | indent(4 * indentationLevel, true) }}
+{% endif -%}
+
+{% for key, value in content.iteritems() -%}
+{% if value is mapping -%}
+{{ context(key, value, indentationLevel + 1) }}
+{% elif value is iterable and value is not string and value is not number -%}
+{% for innerValue in value -%}
+{%- if innerValue is iterable and innerValue is not string and innerValue is not number -%}
+{{ context(key, innerValue, indentationLevel + 1) }}
+{%- else -%}
+{{ directive(key, innerValue, indentationLevel + 1) }}
+{%- endif %}
+{% endfor -%}
+{% else -%}
+{{ directive(key, value, indentationLevel + 1) }}
+{% endif -%}
+{% endfor %}
+
+{%- if name is not none -%}
+{{ "}" | indent(4 * indentationLevel, true) }}
+{%- endif -%}
+{% endmacro -%}
