@@ -1,6 +1,6 @@
 {% macro directive(key, value, indentationLevel = 0) -%}
 {{ "%s %s;" | format(key, value) | indent(4 * indentationLevel, true) }}
-{%- endmacro -%}
+{% endmacro -%}
 
 {% macro context(name, content, indentationLevel = 0) -%}
 {% if name is not none -%}
