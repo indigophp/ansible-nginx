@@ -14,7 +14,7 @@ nginx:
     tcp_nodelay: "on"
     keepalive_timeout: 65
     types_hash_max_size: 2048
-    include: /etc/nginx/mime.types
+    include: {{ __nginx_default_includes }}
     default_type: application/octet-stream
     access_log: /var/log/nginx/access.log
     error_log: /var/log/nginx/error.log

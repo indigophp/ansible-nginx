@@ -1,11 +1,3 @@
-- name: Set default nginx includes (when there are other includes)
-  set_fact: nginx.http.include="{{ nginx.http.include }} + {{ __nginx_default_includes }}"
-  when: nginx.http.include is defined
-
-- name: Set default nginx includes (when there are no other includes)
-  set_fact: nginx.http.include="{{ __nginx_default_includes }}"
-  when: nginx.http.include is not defined
-
 - name: Define nginx user
   set_fact: nginx.user="{{ __nginx_user }}"
   when: nginx.user is not defined
