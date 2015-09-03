@@ -3,5 +3,5 @@
 {% from "macros.j2" import context with context %}
 
 {% for value in nginx_vhosts %}
-{{ context("server", value, -1) }}
+{{ context("server", value) }}
 {% endfor %}
