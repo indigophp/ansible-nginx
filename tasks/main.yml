@@ -1,17 +1,11 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: Define nginx user
-  set_fact:
-    nginx.user: "{{ __nginx_user }}"
-  when: nginx.user is not defined
-
 - name: Install nginx
   include: install.yml
 
 - name: Configure nginx
-  template: src="{{ nginx_global_config.template }}" dest="{{ nginx_global_config.path }}" owner=root group=root force="{{ nginx_global_config.override }}"
-  notify: restart nginx
+  include: configure.yml
 
 - name: Check nginx is started and enabled to start at boot.
   service: name=nginx state=started enabled=yes

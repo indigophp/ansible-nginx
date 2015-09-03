@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+{% from "macros.j2" import context with context %}
+
+{% for value in nginx_vhosts.iteritems() %}
+{{ context(none, value, -1) }}
+{% endfor %}

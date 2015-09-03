@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+{% from "macros.j2" import context with context %}
+
+{% for key, value in nginx_upstreams.iteritems() %}
+{{ context("upstream %s" | format(key), value, -1) }}
+{% endfor %}

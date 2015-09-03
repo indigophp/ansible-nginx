@@ -1,0 +1,40 @@
+- name: Set default nginx includes (when there are other includes)
+  set_fact: nginx.http.include="{{ nginx.http.include }} + {{ __nginx_default_includes }}"
+  when: nginx.http.include is defined
+
+- name: Set default nginx includes (when there are no other includes)
+  set_fact: nginx.http.include="{{ __nginx_default_includes }}"
+  when: nginx.http.include is not defined
+
+- name: Define nginx user
+  set_fact: nginx.user="{{ __nginx_user }}"
+  when: nginx.user is not defined
+
+- name: Configure nginx global
+  template: src="{{ nginx_global_config.template }}" dest="{{ nginx_global_config.path }}" owner=root group=root force="{{ nginx_global_config.override }}"
+  notify: restart nginx
+
+- name: Remove default nginx vhost config file
+  file: path="{{ nginx_default_vhost_path }}" state=absent
+  when: nginx_remove_default_vhost
+  notify: restart nginx
+
+- name: Add managed vhost config file
+  template: src=vhosts.j2 dest="{{ nginx_conf_path }}/vhosts.conf" mode=0644
+  when: nginx_vhosts
+  notify: restart nginx
+
+- name: Remove managed vhost config file
+  file: path="{{ nginx_conf_path }}/vhosts.conf" state=absent
+  when: not nginx_vhosts
+  notify: restart nginx
+
+- name: Add managed upstream config file
+  template: src=upstreams.j2 dest="{{ nginx_conf_path }}/upstreams.conf" mode=0644
+  when: nginx_upstreams
+  notify: restart nginx
+
+- name: Remove managed upstream config file
+  file: path="{{ nginx_conf_path }}/upstreams.conf" state=absent
+  when: not nginx_upstreams
+  notify: restart nginx
